@@ -8,8 +8,8 @@ import Video from './view/Video.jsx'
 import People from './view/People.jsx'
 import Game from './view/Game.jsx'
 
-import './css/default.scss'
-import './css/react.scss'
+// import './css/default.scss'
+// import './css/react.scss'
 
 function App() {
   return (
