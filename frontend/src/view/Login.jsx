@@ -3,12 +3,41 @@
 //     <>Login 화면입니다.</>
 //   )
 // }
-
+import { useState } from "react"
 import { Image, Title, Input, Button, TextLink, Linebar } from "./Component"
+import axios from 'axios'
 
 import IMG_LOGO from "../images/facebook-logo.svg"
 
 export default function Login(props) {
+  const [userid, setUserid] = useState("")
+  const [password, setPassword] = useState("")
+
+  const onClickLogin = () => {
+    console.log(userid, password)
+    axios.post('/api/login', {userid: userid, password: password} ).then((res) => {
+      // console.log(res);
+      // console.log(res.data) 
+
+      const {result} = res.data
+      if(result === "success") {
+        window.location.href = "/home"
+      } else {
+        alert("로그인 아이디 또는 비밀번호를 확인하세요.")
+      }
+    })
+  }
+
+  const onChangeUserid = (event) => {
+    console.log(event.target.value)
+    setUserid(event.target.value)
+  }
+
+  const onChangePassword = (event) => {
+    console.log(event.target.value)
+    setPassword(event.target.value)
+  }
+
   return (
     <div className="login-layer">
       <div className="logo-box">
@@ -17,12 +46,12 @@ export default function Login(props) {
       </div>
       <div className="login-box">
         <div>
-          <Input type="text" placeholder="이메일 또는 전화번호" name="email" />
+          <Input type="text" placeholder="이메일 또는 전화번호" name="email" onChange={onChangeUserid} />
           <div className="login-pass">
-            <Input type="password" placeholder="비밀번호" name="pass" />
+            <Input type="password" placeholder="비밀번호" name="pass" onChange={onChangePassword} />
           </div>
           <div className="login-button">
-            <Button type="primary" onClick={() => window.location.href = "/"} text="로그인" />
+            <Button type="primary" onClick={onClickLogin} text="로그인" />
           </div>
           <TextLink url="./03_facebook_identify.html" text="비밀번호를 잊으셨나요?" />
           <Linebar />
