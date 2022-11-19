@@ -1,9 +1,3 @@
-// export default function Login(props) {
-//   return (
-//     <>Login 화면입니다.</>
-//   )
-// }
-
 import { Image, Title, Input, Button, TextLink, Linebar } from "./Component"
 
 import IMG_LOGO from "../images/facebook-logo.svg"

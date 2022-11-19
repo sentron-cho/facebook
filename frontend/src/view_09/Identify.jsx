@@ -1,5 +1,7 @@
 export default function Identify(props) {
   return (
-    <>Identify 화면입니다.</>
+    <div>
+      <h3>사용자 찾기</h3>
+    </div>
   )
 }

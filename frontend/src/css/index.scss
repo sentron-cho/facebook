@@ -1,0 +1,84 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f0f2f5;
+}
+
+header {
+  margin: 10px;
+
+  a {
+    margin: 10px;
+    font-size: 20px;
+  }
+}
+
+.login-layer {
+  width: 960px;
+  margin: 0 auto;
+  margin-top: 140px;
+
+  .logo-box {
+    display: inline-block;
+    width: 560px;
+    height: 360px;
+    vertical-align: top;
+
+    img {
+      width: 300px;
+      margin-left: -26px;
+      margin-top: 44px;
+    }
+
+    h2 {
+      margin: 0;
+      padding: 0;
+      font-size: 28px;
+      font-weight: normal;
+      line-height: 32px;
+      width: 500px;
+    }
+  }
+
+  .login-box {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 400px;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 0 2px #e7f3ff;
+    text-align: center;
+    background: white;
+
+		.login-pass {
+			margin-top: 10px;
+		}
+	
+		.login-button {
+			margin: 30px 0 10px 0;
+		}
+	
+		.regist-button {
+			width: 200px;
+			margin: 0 auto;
+		}
+	
+		.new-page {
+			margin-top: 40px;
+			font-size: 14px;
+
+			.text {
+				margin-right: 10px;
+			}
+		}
+
+		.mata-cop {
+			margin-top: 10px;
+		}
+  }
+}
