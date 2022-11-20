@@ -12,8 +12,8 @@ const bodyparser = require('body-parser');
 app.use(bodyparser.urlencoded({extended: false}))
 app.use(bodyparser.json())
 
-const login = require("./src/api/login");
-app.use("/api/login", login);
+const api = require("./src/api/index");
+app.use("/api", api);
 
 const http = require('http').createServer(app);
 http.listen(8080, function () {

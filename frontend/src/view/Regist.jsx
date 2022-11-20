@@ -4,11 +4,84 @@
 //   )
 // }
 
+import { useState } from "react"
 import { Image, Title, Subtitle, Input, Button, TextLink, Linebar, Select, Radio } from "./Component"
-
 import IMG_LOGO from "../images/facebook-logo.svg"
+import axios from 'axios'
 
 export default function Regist(props) {
+  const [name, setName] = useState("")
+  const [userid, setUserid] = useState("")
+  const [password, setPassword] = useState("")
+  const [year, setYear] = useState("")
+  const [month, setMonth] = useState("")
+  const [day, setDay] = useState("")
+  const [gender, setGender] = useState("")
+
+  const onClickRegist = () => {
+    console.log("onClickRegit")
+
+    console.log(name, userid, password, year, month, day, gender)
+
+    if(!name) return alert("이름은 필수 입력사항 입니다.")
+    if(!userid) return alert("사용자아이디는 필수 입력사항 입니다.")
+    if(!password) return alert("비밀번호는 필수 입력사항 입니다.")
+    if(!year) return alert("출생년도 필수 입력사항 입니다.")
+    if(!month) return alert("출생월은 필수 입력사항 입니다.")
+    if(!day) return alert("출생일은 필수 입력사항 입니다.")
+    if(!gender) return alert("성별은 필수 입력사항 입니다.")
+
+    const params = {
+      name: name, 
+      userid: userid, 
+      password: password, 
+      year: year, 
+      month: month, 
+      day: day, 
+      gender: gender
+    }
+    axios.post('/api/regist', params ).then((res) => {
+      const {result} = res.data
+      if(result === "success") {
+        alert("회원가입에 성공하였습니다. 로그인 화면으로 이동합니다.")
+        window.location.href = "/"
+      } else {
+        alert("회원가입에 실패하였습니다. 정보를 확인하세요")
+      }
+    })
+  }
+
+  const onChangeName = (event) => {
+    console.log(event.target.value)
+    setName(event.target.value)
+  }
+
+  const onChangeUserid = (event) => {
+    console.log(event.target.value)
+    setUserid(event.target.value)
+  }
+
+  const onChangePassword = (event) => {
+    console.log(event.target.value)
+    setPassword(event.target.value)
+  }
+
+  const onChangeYear = (event) => {
+    console.log(event.target.value)
+    setYear(event.target.value)
+  }
+
+  const onChangeMonth = (event) => {
+    console.log(event.target.value)
+    setMonth(event.target.value)
+  }
+
+  const onChangeDay = (event) => {
+    console.log(event.target.value)
+    setDay(event.target.value)
+  }
+
+
   return (
     <div className="regist-layer">
       {/* 상단 로고 이미지 */}
@@ -26,16 +99,13 @@ export default function Regist(props) {
         {/* 박스 콘텐츠 */}
         <div className="body">
           
-          {/* 성명 입력 폼 */}
-          <div className="in-name">
-            <div><Input type="text" name="lastname" placeholder="성" /></div>
-            <div><Input type="text" name="firstname" placeholder="이름(성은 제외)" /></div>
-          </div>
+          {/* 이름 */}
+          <Input type="text" name="lastname" placeholder="이름" onChange={onChangeName} />
           
           {/* 휴대폰 및 비밀번호 폼 */}
           <div className="in-info">
-            <Input type="text" name="reg-email" placeholder="휴대폰 번호 또는 이메일" />
-            <Input type="password" name="reg-pass" placeholder="새 비밀번호" />
+            <Input type="text" name="reg-email" placeholder="휴대폰 번호 또는 이메일" onChange={onChangeUserid} />
+            <Input type="password" name="reg-pass" placeholder="새 비밀번호" onChange={onChangePassword} />
           </div>
 
           {/* 생년월일 */}
@@ -45,28 +115,31 @@ export default function Regist(props) {
               {/* 년도 */}
               <Select name="birth-year" title="연도" list={
                 [
+                  { value: "", text: "출생년"},
                   { value: "2021", text: "2021"},
                   { value: "2020", text: "2020"},
                   { value: "2019", text: "2019"}
                 ]
-              }/>
+              } onChange={onChangeYear}/>
               {/* 월 */}
               <Select name="birth-month" title="연도" list={
                 [
+                  { value: "", text: "출생월"},
                   { value: "1", text: "1월"},
                   { value: "2", text: "2월"},
                   { value: "3", text: "3월"}
                 ]
-              }/>
+              } onChange={onChangeMonth}/>
 
               {/* 일 */}
               <Select name="birth-day" title="일" list={
                 [
+                  { value: "", text: "출생일"},
                   { value: "1", text: "1일"},
                   { value: "2", text: "2일"},
                   { value: "3", text: "3일"}
                 ]
-              }/>
+              } onChange={onChangeDay}/>
             </div>
           </div>
 
@@ -74,9 +147,9 @@ export default function Regist(props) {
           <div className="in-type">
             <Subtitle text="성별" />
             <span className="in-type">
-              <Radio id="rdo-1" name="sex" value="1" text="여성" />
-              <Radio id="rdo-2" name="sex" value="2" text="남성" />
-              <Radio id="rdo-3" name="sex" value="3" text="개인지정" />
+              <Radio id="rdo-1" name="sex" value="1" text="여성" onClick={() => setGender("여성")} />
+              <Radio id="rdo-2" name="sex" value="2" text="남성" onClick={() => setGender("남성")} />
+              <Radio id="rdo-3" name="sex" value="3" text="개인지정" onClick={() => setGender("개인지정")} />
             </span>
           </div>
 
@@ -87,7 +160,7 @@ export default function Regist(props) {
           
           {/* 가입하기 버튼 */}
           <div className="regist">
-            <Button type="secondary" name="submit" text="가입하기"/>
+            <Button type="secondary" name="submit" text="가입하기" onClick={onClickRegist}/>
           </div>
           
           {/* 로그인 페이지 이동 */}

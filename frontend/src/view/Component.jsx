@@ -40,21 +40,15 @@ export const Subtitle = (props) => {
 }
 
 export const Select = (props) => {
-  const list = [
-    { value: "2021", text: "2021"},
-    { value: "2020", text: "2020"},
-    { value: "2019", text: "2019"}
-  ]
-
-  return  <select className="my-select" name={props.name} title={props.title}>
+  return  <select className="my-select" name={props.name} title={props.title} onChange={props.onChange}>
     {/* <option value="2021">2021</option> */}
-    { list.map(item => <option value={item.value}>{item.text}</option>) }
+    { props.list.map(item => <option key={item.value} value={item.value}>{item.text}</option>) }
   </select>
 }
 
 export const Radio = (props) => {
   return <span className="my-radio">
-    <label for={props.id}>{props.text}</label>
-    <input id={props.id} type="radio" name={props.name} value={props.value} />
+    <label>{props.text}</label>
+    <input type="radio" name={props.name} value={props.value} onClick={props.onClick} />
 </span>
 }

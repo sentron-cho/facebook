@@ -135,15 +135,6 @@ header {
         margin: 5px 2px;
         padding: 10px;
       }
-
-      .in-name {
-        & > div {
-          width: calc(50% - 4px);
-          margin-left: 2px;
-          margin-right: 2px;
-          display: inline-block;
-        }
-      }
     }
 
     .in-age select,
