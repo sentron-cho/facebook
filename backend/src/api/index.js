@@ -53,4 +53,20 @@ router.get('/identify', (req, res) => {
 });
 
 
+// /api/user DELETE 파라미터를 전달 받아 조회한다.
+router.delete('/user', (req, res) => {
+    console.log("===========> [DELETE]/api/user call!")
+
+    const { email, userid } = req.query;
+
+    console.log(req.query)
+
+    if(email === "sentron@email.com" && userid === "sentron") {
+        res.send({result: "success"})
+    } else {
+        res.send({result: "fail"})
+    }
+});
+
+
 module.exports = router;

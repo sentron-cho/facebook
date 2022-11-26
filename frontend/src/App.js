@@ -4,6 +4,7 @@ import Login from './view/Login.jsx'
 import Home from './view/Home.jsx'
 import Regist from './view/Regist.jsx'
 import Identify from './view/Identify.jsx'
+import DeleteUser from './view/DeleteUser.jsx'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Link to="/home">홈</Link>
         <Link to="/regist">사용자 등록</Link>
         <Link to="/identify">사용자 찾기</Link>
+        <Link to="/deleteuser">회원 탈퇴</Link>
       </header>
       
       <main>
@@ -21,6 +23,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/identify" element={<Identify />} />
+          <Route path="/deleteuser" element={<DeleteUser />} />
         </Routes>
       </main>
     </BrowserRouter>
