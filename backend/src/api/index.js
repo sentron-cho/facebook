@@ -33,5 +33,24 @@ router.post('/regist', (req, res) => {
     // res.send('로그인을 수행했습니다.'); 
 });
 
+// /api/identify GET 파라미터를 전달 받아 조회한다.
+router.get('/identify', (req, res) => {
+    console.log("===========> [GET]/api/identify call!")
+
+    const { value } = req.query;
+
+    console.log(req.query)
+
+    if(value === "sentron@email.com") {
+        res.send({result: "sentron"})
+    } else if(value === "aaa@email.com") {
+        res.send({result: "aaa123"})
+    } else if(value === "bbb@email.com") {
+        res.send({result: "bbb123"})
+    } else {
+        res.send({result: "fail", text: "계정이 존재하지 않습니다."})
+    }
+});
+
 
 module.exports = router;
