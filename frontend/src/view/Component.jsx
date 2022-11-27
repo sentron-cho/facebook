@@ -1,5 +1,9 @@
 export const Image = (props) => {
-  return <div className={'my-image'}>
+  // return <div className={'my-image'}>
+  //   <img src={props.src} alt={props.alt} />
+  // </div>
+
+  return <div className={`my-image ${props.className}`}>
     <img src={props.src} alt={props.alt} />
   </div>
 }
