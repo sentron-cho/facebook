@@ -2,6 +2,9 @@ import { Route, BrowserRouter, Routes, Link } from 'react-router-dom'
 
 import Login from './view/Login.jsx'
 import Home from './view/Home.jsx'
+import Video from './view/Video.jsx'
+import Game from './view/Game.jsx'
+import People from './view/People.jsx'
 import Regist from './view/Regist.jsx'
 import Identify from './view/Identify.jsx'
 import DeleteUser from './view/DeleteUser.jsx'
@@ -21,6 +24,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/video" element={<Video />} />
+          <Route path="/people" element={<People />} />
+          <Route path="/game" element={<Game />} />
           <Route path="/regist" element={<Regist />} />
           <Route path="/identify" element={<Identify />} />
           <Route path="/deleteuser" element={<DeleteUser />} />

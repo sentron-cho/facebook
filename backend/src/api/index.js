@@ -68,33 +68,81 @@ router.delete('/user', (req, res) => {
     }
 });
 
+const array = [
+    {
+      no: 1,
+      title: "에듀윌",
+      subtitle: "🚨기간한정 특별 이벤트🚨 초시생 필수템, 만화입문서 무료배포!",
+      tags: "#합격자수1위 #에듀윌 #공인중개사",
+      url: "EDUWILL.NET",
+      text: "입문교재 선착순 무료신청☞",
+      image: "/images/game-1.jpg",
+      like: 1,
+      comment: ["안녕하세요"]
+    },
+    {
+      no: 2,
+      title: "코리아아이티",
+      subtitle: "🚨기간한정 특별 이벤트🚨 우리 모두 화이팅합시!!!!",
+      tags: "#대한민국 #강남구 #역삼동",
+      url: "KOREAIT.NET",
+      text: "동영상 무로 제공☞",
+      image: "/images/game-2.jpg",
+      like: 2,
+      comment: ["반갑습니다."]
+    }
+]
+
 // /api/user DELETE 파라미터를 전달 받아 조회한다.
 router.get('/home', (req, res) => {
     console.log("===========> [GET]/api/home call!")
     console.log(req.query)
 
-    const array = [
-        {
-          no: 1,
-          title: "에듀윌",
-          subtitle: "🚨기간한정 특별 이벤트🚨 초시생 필수템, 만화입문서 무료배포!",
-          tags: "#합격자수1위 #에듀윌 #공인중개사",
-          url: "EDUWILL.NET",
-          text: "입문교재 선착순 무료신청☞",
-          image: "/images/game-1.jpg"
-        },
-        {
-          no: 2,
-          title: "코리아아이티",
-          subtitle: "🚨기간한정 특별 이벤트🚨 우리 모두 화이팅합시!!!!",
-          tags: "#대한민국 #강남구 #역삼동",
-          url: "KOREAIT.NET",
-          text: "동영상 무로 제공☞",
-          image: "/images/game-2.jpg"
-        }
-    ]
-
     res.send({result: array})
+});
+
+router.put('/home/like', (req, res) => {
+    console.log("===========> [GET]/api/home/like call!")
+    console.log(req.body)
+    const {no, like} = req.body
+
+    // console.log(array)
+    const item = array.find(a => a.no === no)
+    item.like = item.like + like
+
+    console.log(item)
+
+    res.send({result: item})
+});
+
+router.put('/home/comment', (req, res) => {
+    console.log("===========> [GET]/api/home/comment call!")
+    console.log(req.body)
+    const {no, comment} = req.body
+
+    // console.log(array)
+    const item = array.find(a => a.no === no)
+    console.log(item)
+
+    item.comment.push(comment)
+    console.log(item)
+
+    res.send({result: item})
+});
+
+router.delete('/home/comment', (req, res) => {
+    console.log("===========> [GET]/api/home/comment call!")
+    console.log(req.query)
+    const {no, index} = req.query
+
+    // console.log(array)
+    const item = array.find(a => a.no === Number(no))
+    console.log(item)
+    
+    item.comment.pop(index)
+    console.log(item)
+
+    res.send({result: "success"})
 });
 
 module.exports = router;

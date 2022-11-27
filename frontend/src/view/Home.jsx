@@ -114,6 +114,15 @@ export default function Home(props) {
     window.location.href = "/"
     alert("로그아웃 되었습니다.")
   }
+
+  const onRefresh = () => {
+    axios.get('/api/home', {} ).then((res) => {
+      const {result} = res.data
+      console.log(result)
+
+      setList(result)
+    })
+  }
   
   return (
     <>
@@ -121,7 +130,7 @@ export default function Home(props) {
 
       <section className="home-layer">
         <ul className="list">
-          {list && list.map(item => <li key={item.no}><CardBox value={item} /></li>)}
+          {list && list.map(item => <li key={item.no}><CardBox value={item} onRefresh={onRefresh}/></li>)}
         </ul>
       </section>
     </>
@@ -129,21 +138,40 @@ export default function Home(props) {
 }
 
 const CardBox = (props) => {
-  const {title, subtitle, tags, url, text, image} = props.value
+  const {no, title, subtitle, tags, url, text, image, like, comment} = props.value
+  const [commentShow, setCommentShow] = useState(false)
 
   const onClickLike = () => {
-    
+    axios.put('/api/home/like', {no: no, like: 1} ).then((res) => {
+      props.onRefresh && props.onRefresh()
+    })
   }
 
   const onClickComment = () => {
-    
+    setCommentShow(!commentShow)
+  }
+
+  const onClickCommentSave = (value) => {
+    console.log(value)
+
+    axios.put('/api/home/comment', {no: no, comment: value} ).then((res) => {
+      props.onRefresh && props.onRefresh()
+    })
+  }
+  
+  const onClickCommentRemove = (index) => {
+    console.log(index)
+
+    axios.delete('/api/home/comment', {params: {no: no, index: index}} ).then((res) => {
+      props.onRefresh && props.onRefresh()
+    })
   }
 
   const onClickLink = () => {
     
   }
 
-  console.log(image)
+  console.log(props.value)
 
   return <div className="card">
   <div className="head">
@@ -173,22 +201,63 @@ const CardBox = (props) => {
   <div className="foot">
     <div className="btn-box active">
       <div>
-        <Image src={HOME_ICON} alt="홈 바로가기" />
-        <span className="btn-text" onClick={onClickLike}>좋아요</span>
+        <Image src={HOME_ICON} />
+        <span className="btn-text" onClick={onClickLike}>좋아요<span>{`(${like})`}</span></span>
       </div>
     </div>
     <div className="btn-box">
       <div>
-        <Image src={YOUTUBE_ICON} alt="동영상 바로가기" />
+        <Image src={YOUTUBE_ICON} />
         <span className="btn-text" onClick={onClickComment}>댓글 달기</span>
       </div>
     </div>
     <div className="btn-box">
       <div>
-        <Image src={PEOPLE_ICON} alt="사용자 바로가기" />
+        <Image src={PEOPLE_ICON} />
         <span className="btn-text" onClick={onClickLink}>공유 하기</span>
       </div>
     </div>
   </div>
+  <div>
+    <CommentBox show={commentShow} comment={comment} onClick={onClickCommentSave} onClickRemove={onClickCommentRemove} />
+  </div>
 </div>
+}
+
+const CommentBox = (props) => {
+  const [value, setValue] = useState('')
+
+  const onChangeInput = (event) => {
+    console.log(event.target.value)
+    setValue(event.target.value)
+  }
+
+  const onClickSave = () => {
+    console.log(value)
+    props.onClick(value)
+    setValue("")
+  }
+
+  const onClickRemove = (index) => {
+    console.log(index)
+    props.onClickRemove(index)
+  }
+
+  if(props.show) {
+    return <div className="comment-box">
+    <ul>
+      {props.comment && props.comment.map((text, index) => {
+        return <li key={index}>{text}
+          <Button type="secondary" onClick={() => onClickRemove(index)} text="삭제" />
+        </li>
+      })}
+    </ul>
+    <div className="input-box">
+      <textarea value={value} onChange={onChangeInput} placeholder={"여기에 댓글을 입력하세요"} />
+      <Button type="primary" onClick={onClickSave} text="저장" />
+    </div>
+  </div>
+  } else {
+    return <div></div>
+  }
 }
