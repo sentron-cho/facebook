@@ -35,8 +35,6 @@ router.post('/regist', (req, res) => {
 
 // /api/identify GET 파라미터를 전달 받아 조회한다.
 router.get('/identify', (req, res) => {
-    console.log("===========> [GET]/api/identify call!")
-
     const { value } = req.query;
 
     console.log(req.query)
@@ -55,8 +53,6 @@ router.get('/identify', (req, res) => {
 
 // /api/user DELETE 파라미터를 전달 받아 조회한다.
 router.delete('/user', (req, res) => {
-    console.log("===========> [DELETE]/api/user call!")
-
     const { email, userid } = req.query;
 
     console.log(req.query)
@@ -95,52 +91,47 @@ const array = [
 
 // /api/user DELETE 파라미터를 전달 받아 조회한다.
 router.get('/home', (req, res) => {
-    console.log("===========> [GET]/api/home call!")
-    console.log(req.query)
+    // console.log(req.query)
 
     res.send({result: array})
 });
 
 router.put('/home/like', (req, res) => {
-    console.log("===========> [GET]/api/home/like call!")
     console.log(req.body)
     const {no, like} = req.body
 
     // console.log(array)
     const item = array.find(a => a.no === no)
     item.like = item.like + like
-
-    console.log(item)
+    // console.log(item)
 
     res.send({result: item})
 });
 
 router.put('/home/comment', (req, res) => {
-    console.log("===========> [GET]/api/home/comment call!")
     console.log(req.body)
     const {no, comment} = req.body
 
     // console.log(array)
     const item = array.find(a => a.no === no)
-    console.log(item)
+    // console.log(item)
 
     item.comment.push(comment)
-    console.log(item)
+    // console.log(item)
 
     res.send({result: item})
 });
 
 router.delete('/home/comment', (req, res) => {
-    console.log("===========> [GET]/api/home/comment call!")
     console.log(req.query)
     const {no, index} = req.query
 
     // console.log(array)
     const item = array.find(a => a.no === Number(no))
-    console.log(item)
+    // console.log(item)
     
     item.comment.pop(index)
-    console.log(item)
+    // console.log(item)
 
     res.send({result: "success"})
 });
