@@ -1,15 +1,59 @@
 const express = require("express");
 const router = express.Router();
+const mysql = require("./mysql")
 
-// /api/login POST 데이터를 전달받는다.
-router.post('/login', (req, res) => {
+// // /api/login POST 데이터를 전달받는다.
+// router.post('/login', (req, res) => {
+//     console.log("===========> [POST]/api/login call!")
+
+//     const {userid, password} = req.body;
+
+//     console.log(userid, password);
+
+//     mysql.selectUsers("", (result) => {
+//         console.log(result)
+//     })
+
+//     if(userid === "sentron" && password === "1234") {
+//         res.send({result: "success"})
+//     } else {
+//         res.send({result: "fail"})
+//     }
+// });
+
+// router.post('/login', (req, res) => {
+//     console.log("===========> [POST]/api/login call!")
+
+//     const {userid, password} = req.body;
+
+//     console.log(userid, password);
+
+//     mysql.findUser({userid, password}, (result) => {
+//         console.log("================================")
+//         console.log(result)
+//         console.log("================================")
+
+//         if(result && result.length > 0) {
+//             res.send({result: "success"})
+//         } else {
+//             res.send({result: "fail"})
+//         }
+        
+//     })
+// });
+
+router.post('/login', async (req, res) => {
     console.log("===========> [POST]/api/login call!")
 
     const {userid, password} = req.body;
+    console.log(userid, password);
 
-    console.log(userid, password)
+    const result = await mysql.findUser({userid, password})
+    console.log("================================")
+    console.log(result)
+    console.log("================================")
 
-    if(userid === "sentron" && password === "1234") {
+    if(result && result.length > 0) {
         res.send({result: "success"})
     } else {
         res.send({result: "fail"})
