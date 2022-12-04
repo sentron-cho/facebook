@@ -407,6 +407,11 @@ header {
       align-items: center;
       flex-direction: column;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+      .my-image {
+        min-width: 600px; 
+        min-height: 320px;
+      }
     }
     .text {
       padding: 10px 20px;

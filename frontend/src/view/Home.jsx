@@ -130,7 +130,7 @@ export default function Home(props) {
 
       <section className="home-layer">
         <ul className="list">
-          {list && list.map(item => <li key={item.no}><CardBox value={item} onRefresh={onRefresh}/></li>)}
+          {list && list.map(item => <li key={item.homeid}><CardBox value={item} onRefresh={onRefresh}/></li>)}
         </ul>
       </section>
     </>
@@ -138,11 +138,12 @@ export default function Home(props) {
 }
 
 const CardBox = (props) => {
-  const {no, title, subtitle, tags, url, text, image, like, comment} = props.value
+  const {homeid, title, subtitle, tags, url, text, image, likecount, comment} = props.value
   const [commentShow, setCommentShow] = useState(false)
 
   const onClickLike = () => {
-    axios.put('/api/home/like', {no: no, like: 1} ).then((res) => {
+    console.log({homeid: homeid, like: 1})
+    axios.put('/api/home/like', {homeid: homeid, like: likecount + 1} ).then((res) => {
       props.onRefresh && props.onRefresh()
     })
   }
@@ -154,15 +155,15 @@ const CardBox = (props) => {
   const onClickCommentSave = (value) => {
     console.log(value)
 
-    axios.put('/api/home/comment', {no: no, comment: value} ).then((res) => {
+    axios.put('/api/home/comment', {homeid: homeid, text: value} ).then((res) => {
       props.onRefresh && props.onRefresh()
     })
   }
   
-  const onClickCommentRemove = (index) => {
-    console.log(index)
+  const onClickCommentRemove = (cmtid) => {
+    console.log(cmtid)
 
-    axios.delete('/api/home/comment', {params: {no: no, index: index}} ).then((res) => {
+    axios.delete('/api/home/comment', {params: {cmtid: cmtid}} ).then((res) => {
       props.onRefresh && props.onRefresh()
     })
   }
@@ -202,7 +203,7 @@ const CardBox = (props) => {
     <div className="btn-box active">
       <div>
         <Image src={HOME_ICON} />
-        <span className="btn-text" onClick={onClickLike}>좋아요<span>{`(${like})`}</span></span>
+        <span className="btn-text" onClick={onClickLike}>좋아요<span>{`(${likecount})`}</span></span>
       </div>
     </div>
     <div className="btn-box">
@@ -238,17 +239,19 @@ const CommentBox = (props) => {
     setValue("")
   }
 
-  const onClickRemove = (index) => {
-    console.log(index)
-    props.onClickRemove(index)
+  const onClickRemove = (cmtid) => {
+    console.log(cmtid)
+    props.onClickRemove(cmtid)
   }
+
+  console.log(props.comment)
 
   if(props.show) {
     return <div className="comment-box">
     <ul>
-      {props.comment && props.comment.map((text, index) => {
-        return <li key={index}>{text}
-          <Button type="secondary" onClick={() => onClickRemove(index)} text="삭제" />
+      {props.comment && props.comment.map((item) => {
+        return <li key={item.cmtid}>{item.text}
+          <Button type="secondary" onClick={() => onClickRemove(item.cmtid)} text="삭제" />
         </li>
       })}
     </ul>

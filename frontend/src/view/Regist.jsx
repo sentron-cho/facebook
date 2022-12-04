@@ -10,7 +10,7 @@ import IMG_LOGO from "../images/facebook-logo.svg"
 import axios from 'axios'
 
 export default function Regist(props) {
-  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
   const [userid, setUserid] = useState("")
   const [password, setPassword] = useState("")
   const [year, setYear] = useState("")
@@ -21,10 +21,10 @@ export default function Regist(props) {
   const onClickRegist = () => {
     console.log("onClickRegit")
 
-    console.log(name, userid, password, year, month, day, gender)
+    console.log(email, userid, password, year, month, day, gender)
 
-    if(!name) return alert("이름은 필수 입력사항 입니다.")
     if(!userid) return alert("사용자아이디는 필수 입력사항 입니다.")
+    if(!email) return alert("이름은 필수 입력사항 입니다.")
     if(!password) return alert("비밀번호는 필수 입력사항 입니다.")
     if(!year) return alert("출생년도 필수 입력사항 입니다.")
     if(!month) return alert("출생월은 필수 입력사항 입니다.")
@@ -32,7 +32,7 @@ export default function Regist(props) {
     if(!gender) return alert("성별은 필수 입력사항 입니다.")
 
     const params = {
-      name: name, 
+      email: email, 
       userid: userid, 
       password: password, 
       year: year, 
@@ -45,15 +45,18 @@ export default function Regist(props) {
       if(result === "success") {
         alert("회원가입에 성공하였습니다. 로그인 화면으로 이동합니다.")
         window.location.href = "/"
-      } else {
+      } else if(result === "dup-userid") {
+        alert("입력한 계정ID는 중복되었습니다. 아이디를 다시 입력하세요.")
+      }
+      else {
         alert("회원가입에 실패하였습니다. 정보를 확인하세요")
       }
     })
   }
 
-  const onChangeName = (event) => {
+  const onChangeEmail = (event) => {
     console.log(event.target.value)
-    setName(event.target.value)
+    setEmail(event.target.value)
   }
 
   const onChangeUserid = (event) => {
@@ -99,12 +102,11 @@ export default function Regist(props) {
         {/* 박스 콘텐츠 */}
         <div className="body">
           
-          {/* 이름 */}
-          <Input type="text" name="lastname" placeholder="이름" onChange={onChangeName} />
+            <Input type="text" name="reg-email" placeholder="계정" onChange={onChangeUserid} />
           
           {/* 휴대폰 및 비밀번호 폼 */}
           <div className="in-info">
-            <Input type="text" name="reg-email" placeholder="휴대폰 번호 또는 이메일" onChange={onChangeUserid} />
+            <Input type="text" name="lastname" placeholder="이메일" onChange={onChangeEmail} />
             <Input type="password" name="reg-pass" placeholder="새 비밀번호" onChange={onChangePassword} />
           </div>
 

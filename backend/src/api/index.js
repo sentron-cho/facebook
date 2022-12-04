@@ -61,34 +61,44 @@ router.post('/login', async (req, res) => {
 });
 
 // /api/regist POST 데이터를 전달받는다.
-router.post('/regist', (req, res) => {
+router.post('/regist', async (req, res) => {
     console.log("===========> [POST]/api/regist call!")
+    console.log(req.body)
 
-    const {name, userid, password, year, month, day, gender} = req.body;
+    // 중복 체크를 먼저 하자
+    const user = await mysql.checkUser(req.body)
+    console.log(user)
 
-    console.log(name, userid, password, year, month, day, gender)
-
-    if(name && userid && password && year && month && day && gender) {
-        res.send({result: "success"})
+    // 중복된 사용자면 중복방지를 위해 반환
+    if(user) {
+        res.send({result: "dup-userid"})
     } else {
-        res.send({result: "fail"})
+        // 중복되지 않은 경우에 회원가입
+        const result = await mysql.insertUser(req.body)
+        console.log("================================")
+        console.log(result)
+        console.log("================================")
+    
+        if(result) {
+            res.send({result: "success"})
+        } else {
+            res.send({result: "fail"})
+        }    
     }
-
-    // res.send('로그인을 수행했습니다.'); 
 });
 
 // /api/identify GET 파라미터를 전달 받아 조회한다.
-router.get('/identify', (req, res) => {
+router.get('/identify', async (req, res) => {
     const { value } = req.query;
 
     console.log(req.query)
 
-    if(value === "sentron@email.com") {
-        res.send({result: "sentron"})
-    } else if(value === "aaa@email.com") {
-        res.send({result: "aaa123"})
-    } else if(value === "bbb@email.com") {
-        res.send({result: "bbb123"})
+    const user = await mysql.findAccountid({email: value})
+    console.log(user)
+
+    if(user) {
+        const {userid} = user;
+        res.send({result: userid})
     } else {
         res.send({result: "fail", text: "계정이 존재하지 않습니다."})
     }
@@ -96,88 +106,79 @@ router.get('/identify', (req, res) => {
 
 
 // /api/user DELETE 파라미터를 전달 받아 조회한다.
-router.delete('/user', (req, res) => {
+router.delete('/user', async (req, res) => {
     const { email, userid } = req.query;
-
     console.log(req.query)
 
-    if(email === "sentron@email.com" && userid === "sentron") {
+    const result = await mysql.deleteUser(req.query)
+    console.log(result)
+
+    if(result) {
         res.send({result: "success"})
     } else {
         res.send({result: "fail"})
     }
 });
 
-const array = [
-    {
-      no: 1,
-      title: "에듀윌",
-      subtitle: "🚨기간한정 특별 이벤트🚨 초시생 필수템, 만화입문서 무료배포!",
-      tags: "#합격자수1위 #에듀윌 #공인중개사",
-      url: "EDUWILL.NET",
-      text: "입문교재 선착순 무료신청☞",
-      image: "/images/game-1.jpg",
-      like: 1,
-      comment: ["안녕하세요"]
-    },
-    {
-      no: 2,
-      title: "코리아아이티",
-      subtitle: "🚨기간한정 특별 이벤트🚨 우리 모두 화이팅합시!!!!",
-      tags: "#대한민국 #강남구 #역삼동",
-      url: "KOREAIT.NET",
-      text: "동영상 무로 제공☞",
-      image: "/images/game-2.jpg",
-      like: 2,
-      comment: ["반갑습니다."]
-    }
-]
-
 // /api/user DELETE 파라미터를 전달 받아 조회한다.
-router.get('/home', (req, res) => {
+router.get('/home', async (req, res) => {
     // console.log(req.query)
+    const array = await mysql.selectHome()
+    for(let item of array) {
+        const comment = await mysql.selectComment(item)
+        item['comment'] = comment
+    }
+    // const list = array.map(async item => {
+    //     const comment = await mysql.selectComment(item)
+    //     item['comment'] = comment
+    //     return item
+    // })
+
+    console.log(array)
 
     res.send({result: array})
 });
 
-router.put('/home/like', (req, res) => {
+router.put('/home/like', async (req, res) => {
     console.log(req.body)
-    const {no, like} = req.body
 
-    // console.log(array)
-    const item = array.find(a => a.no === no)
-    item.like = item.like + like
-    // console.log(item)
-
-    res.send({result: item})
-});
-
-router.put('/home/comment', (req, res) => {
-    console.log(req.body)
-    const {no, comment} = req.body
-
-    // console.log(array)
-    const item = array.find(a => a.no === no)
-    // console.log(item)
-
-    item.comment.push(comment)
-    // console.log(item)
-
-    res.send({result: item})
-});
-
-router.delete('/home/comment', (req, res) => {
-    console.log(req.query)
-    const {no, index} = req.query
-
-    // console.log(array)
-    const item = array.find(a => a.no === Number(no))
-    // console.log(item)
+    await mysql.updateLike(req.body)
     
-    item.comment.pop(index)
+    const item = await mysql.findComment(req.body)
+
     // console.log(item)
 
-    res.send({result: "success"})
+    res.send({result: item})
+});
+
+// /api/user DELETE 파라미터를 전달 받아 조회한다.
+router.get('/home/comment', async (req, res) => {
+    // console.log(req.query)
+    const array = await mysql.selectComment()
+    res.send({result: array})
+});
+
+router.put('/home/comment', async (req, res) => {
+    console.log(req.body)
+
+    await mysql.insertComment(req.body)
+    
+    const item = await mysql.selectComment(req.body)
+
+    // console.log(item)
+
+    res.send({result: item})
+});
+
+router.delete('/home/comment', async (req, res) => {
+    console.log(req.query)
+
+    await mysql.deleteComment(req.query)
+
+    const array = await mysql.selectComment(req.body)
+    console.log(array)
+
+    res.send({result: array})
 });
 
 module.exports = router;
