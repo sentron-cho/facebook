@@ -155,7 +155,7 @@ const CardBox = (props) => {
   const onClickCommentSave = (value) => {
     console.log(value)
 
-    axios.put('/api/home/comment', {homeid: homeid, text: value} ).then((res) => {
+    axios.post('/api/home/comment', {homeid: homeid, text: value} ).then((res) => {
       props.onRefresh && props.onRefresh()
     })
   }
@@ -168,11 +168,17 @@ const CardBox = (props) => {
     })
   }
 
+  const onClickCommentUpdate = (item) => {
+    console.log(item)
+
+    axios.put('/api/home/comment', {...item} ).then((res) => {
+      props.onRefresh && props.onRefresh()
+    })
+  }
+
   const onClickLink = () => {
     
   }
-
-  console.log(props.value)
 
   return <div className="card">
   <div className="head">
@@ -220,13 +226,16 @@ const CardBox = (props) => {
     </div>
   </div>
   <div>
-    <CommentBox show={commentShow} comment={comment} onClick={onClickCommentSave} onClickRemove={onClickCommentRemove} />
+    <CommentBox show={commentShow} comment={comment} onClick={onClickCommentSave} 
+      onClickRemove={onClickCommentRemove} onClickUpdate={onClickCommentUpdate}
+    />
   </div>
 </div>
 }
 
 const CommentBox = (props) => {
   const [value, setValue] = useState('')
+  const [edit, setEdit] = useState(null)
 
   const onChangeInput = (event) => {
     console.log(event.target.value)
@@ -244,21 +253,43 @@ const CommentBox = (props) => {
     props.onClickRemove(cmtid)
   }
 
-  console.log(props.comment)
+  const onClickEdit = (cmtid) => {
+    const item = props.comment.find(a => a.cmtid === cmtid)
+    console.log(item)
+    setEdit(item)
+  }
+
+  const onChangeEdit = (event) => {
+    console.log(event.target.value)
+    const item = {...edit, text: event.target.value}
+    setEdit(item)
+  }
+
+  const onClickUpdate = () => {
+    props.onClickUpdate(edit)
+    setEdit(null)
+  }
 
   if(props.show) {
     return <div className="comment-box">
     <ul>
       {props.comment && props.comment.map((item) => {
         return <li key={item.cmtid}>{item.text}
-          <Button type="secondary" onClick={() => onClickRemove(item.cmtid)} text="삭제" />
+          <div className="buttons">
+            <Button type="primary" onClick={() => onClickEdit(item.cmtid)} text="편집" />
+            <Button type="secondary" onClick={() => onClickRemove(item.cmtid)} text="삭제" />
+          </div>
         </li>
       })}
     </ul>
-    <div className="input-box">
-      <textarea value={value} onChange={onChangeInput} placeholder={"여기에 댓글을 입력하세요"} />
-      <Button type="primary" onClick={onClickSave} text="저장" />
+    {edit ? <div className="input-box">
+      <textarea value={edit.text} onChange={onChangeEdit} />
+      <Button type="secondary" onClick={onClickUpdate} text="저장" />
     </div>
+    : <div className="input-box">
+    <textarea value={value} onChange={onChangeInput} placeholder={"여기에 댓글을 입력하세요"} />
+    <Button type="primary" onClick={onClickSave} text="저장" />
+  </div>}
   </div>
   } else {
     return <div></div>

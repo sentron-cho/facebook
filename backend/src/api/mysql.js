@@ -376,5 +376,32 @@ Maria.deleteComment = (params) => {
   })
 }
 
+Maria.updateComment = (params, callback) => {
+  return new Promise((resolve, reject) => {
+    // 1. DB 커넥션 생성
+    const connection = mysql.createConnection(conn)
+
+    // 2. DB 접속 시작
+    connection.connect()
+
+    const {cmtid, text} = params;
+    // 3. DB 쿼리(사용자 정보 가져오기)
+    const sql = `UPDATE comment SET text='${text}' WHERE cmtid='${cmtid}'`
+    console.log(sql)
+
+    connection.query(sql, (err, results, fields) => {
+      if (err) {
+        console.trace(err)
+        reject(err)
+      }
+      console.log(results)
+
+      // 4. DB 접속 종료
+      connection.end()
+
+      resolve(results && results.affectedRows === 1 ? true : false)
+    })
+  })
+}
 
 module.exports = Maria

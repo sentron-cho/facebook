@@ -158,7 +158,7 @@ router.get('/home/comment', async (req, res) => {
     res.send({result: array})
 });
 
-router.put('/home/comment', async (req, res) => {
+router.post('/home/comment', async (req, res) => {
     console.log(req.body)
 
     await mysql.insertComment(req.body)
@@ -179,6 +179,18 @@ router.delete('/home/comment', async (req, res) => {
     console.log(array)
 
     res.send({result: array})
+});
+
+router.put('/home/comment', async (req, res) => {
+    console.log(req.body)
+
+    await mysql.updateComment(req.body)
+    
+    const item = await mysql.selectComment(req.body)
+
+    // console.log(item)
+
+    res.send({result: item})
 });
 
 module.exports = router;

@@ -496,6 +496,18 @@ header {
       border-top: 1px solid gray;
       font-size: 12px;
       white-space: pre-line;
+
+      .buttons {
+        text-align: right;
+        .my-button {
+          display: inline-block;
+          margin-left: 10px;
+          font-size: 12px;
+          width: 50px;
+          height: 20px;
+          border-radius: 4px;
+        }
+      }
     }
     
     .input-box {
