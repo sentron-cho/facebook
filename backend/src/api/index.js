@@ -193,4 +193,39 @@ router.put('/home/comment', async (req, res) => {
     res.send({result: item})
 });
 
+// 게시판 목록 조회
+router.get('/board', async (req, res) => {
+    console.log(req.query)
+
+    res.send({result: "success"})
+});
+
+// 게시판 항목 조회
+router.get('/board/item', async (req, res) => {
+    console.log(req.query)
+
+    res.send({result: "success"})
+});
+
+// 게시판 항목 추가
+router.post('/board/item', async (req, res) => {
+    console.log(req.body)
+
+    res.send({result: "success"})
+});
+
+// 게시판 항목 편집
+router.put('/board/item', async (req, res) => {
+    console.log(req.body)
+
+    res.send({result: "success"})
+});
+
+// 게시판 항목 삭제
+router.delete('/home/detail', async (req, res) => {
+    console.log(req.query)
+
+    res.send({result: "success"})
+});
+
 module.exports = router;

@@ -991,3 +991,52 @@ header {
     }
   }
 }
+
+.board-layer {
+  & > div {
+    max-width: 1024px;
+    margin: 0 auto;
+    list-style: none;
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      margin-bottom: 20px;
+      float: right;
+
+      button {
+        margin-left: 10px;
+        width: 60px;
+        height: 30px;
+      }
+    }
+  }
+
+  .list {
+
+    li {
+      line-height: 40px;
+      border-bottom: 1px solid gray;
+      padding: 0 10px;
+
+      .title { font-size: 16px; font-weight: bold; }
+      .date { font-size: 12px; float: right; }
+    }
+
+    li:hover {
+      cursor: pointer;
+      background-color: #b9d8ff;
+    }
+  }
+
+  .view {
+
+  }
+
+  .edit {
+
+  }
+}
