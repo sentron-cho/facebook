@@ -27,7 +27,7 @@ import { useEffect } from "react"
 //                 </div>
 //                 <div className="text">
 //                   <p>🚨기간한정 특별 이벤트🚨</p>
-//                   <p>초시생 필수템, 만화입문서 무료배포!</p>
+//                   <p>🚨기간한정 특별 이벤트🚨\n초시생 필수템, 만화입문서 무료배포!</p>
 //                   <p className="blue">#합격자수1위 #에듀윌 #공인중개사</p>
 //                 </div>
 //               </div>
@@ -39,7 +39,7 @@ import { useEffect } from "react"
 //                   <div>
 //                     <p className="grey sm">EDUWILL.NET</p>
 //                     <p className="bold">입문교재 선착순 무료신청☞</p>
-//                     <p className="grey">합격자 수 1위 에듀윌 공인중개사</p>
+//                     <p className="grey">>입문교재 선착순 무료신청☞\n합격자 수 1위 에듀윌 공인중개사</p>
 //                   </div>
 //                   <button>더 알아보기</button>
 //                 </div>

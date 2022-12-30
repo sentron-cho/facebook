@@ -80,6 +80,7 @@ export default function Header(props) {
           <MenuIcon src={YOUTUBE_ICON} className={props.name === "video" ? 'active' : ''} onClick={() => { window.location.href = "/video" }} />
           <MenuIcon src={PEOPLE_ICON} className={props.name === "people" ? 'active' : ''} onClick={() => { window.location.href = "/people" }} />
           <MenuIcon src={GAME_ICON} className={props.name === "game" ? 'active' : ''} onClick={() => { window.location.href = "/game" }} />
+          <MenuIcon src={ALARM_ICON} className={props.name === "board" ? 'active' : ''} onClick={() => { window.location.href = "/board" }} />
         </nav>
       </div>
       <div className='head-side'>
