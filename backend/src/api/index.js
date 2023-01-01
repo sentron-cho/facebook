@@ -1,231 +1,147 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const mysql = require("./mysql")
+const mysql = require('./maria');
 
-// // /api/login POST 데이터를 전달받는다.
-// router.post('/login', (req, res) => {
-//     console.log("===========> [POST]/api/login call!")
-
-//     const {userid, password} = req.body;
-
-//     console.log(userid, password);
-
-//     mysql.selectUsers("", (result) => {
-//         console.log(result)
-//     })
-
-//     if(userid === "sentron" && password === "1234") {
-//         res.send({result: "success"})
-//     } else {
-//         res.send({result: "fail"})
-//     }
-// });
-
-// router.post('/login', (req, res) => {
-//     console.log("===========> [POST]/api/login call!")
-
-//     const {userid, password} = req.body;
-
-//     console.log(userid, password);
-
-//     mysql.findUser({userid, password}, (result) => {
-//         console.log("================================")
-//         console.log(result)
-//         console.log("================================")
-
-//         if(result && result.length > 0) {
-//             res.send({result: "success"})
-//         } else {
-//             res.send({result: "fail"})
-//         }
-        
-//     })
-// });
-
+// /api/login POST 데이터를 전달 받는다.
 router.post('/login', async (req, res) => {
-    console.log("===========> [POST]/api/login call!")
+    console.log(req.body);
 
-    const {userid, password} = req.body;
-    console.log(userid, password);
+    const { userid, password } = req.body;
 
-    const result = await mysql.findUser({userid, password})
-    console.log("================================")
-    console.log(result)
-    console.log("================================")
+    const results = await mysql.findUser(req.body);
+    console.log(results);
 
-    if(result && result.length > 0) {
-        res.send({result: "success"})
+    if (results && results.length > 0) {
+        res.send({ result: 'success' });
     } else {
-        res.send({result: "fail"})
+        res.send({ result: 'fail' });
     }
 });
 
-// /api/regist POST 데이터를 전달받는다.
+// /api/login POST 데이터를 전달 받는다.
 router.post('/regist', async (req, res) => {
-    console.log("===========> [POST]/api/regist call!")
-    console.log(req.body)
+    console.log(req.body);
 
-    // 중복 체크를 먼저 하자
-    const user = await mysql.checkUser(req.body)
-    console.log(user)
+    // 사용자 아이디 중복체크
+    const user = await mysql.checkUser(req.body);
+    console.log(user);
 
-    // 중복된 사용자면 중복방지를 위해 반환
-    if(user) {
-        res.send({result: "dup-userid"})
+    // 중복되었으면 해당하는 코드를 보내자..
+    if (user && user.length > 0) {
+        res.send({ result: 'dup-userid' });
     } else {
-        // 중복되지 않은 경우에 회원가입
-        const result = await mysql.insertUser(req.body)
-        console.log("================================")
-        console.log(result)
-        console.log("================================")
-    
-        if(result) {
-            res.send({result: "success"})
+        // 중복되지 않은 경우만 삽입한다.
+        const result = await mysql.insertUser(req.body);
+        console.log(result);
+
+        if (result) {
+            1;
+            res.send({ result: 'success' });
         } else {
-            res.send({result: "fail"})
-        }    
+            res.send({ result: 'fail' });
+        }
     }
 });
 
-// /api/identify GET 파라미터를 전달 받아 조회한다.
 router.get('/identify', async (req, res) => {
-    const { value } = req.query;
+    console.log(req.query);
 
-    console.log(req.query)
+    const { email } = req.query;
 
-    const user = await mysql.findAccountid({email: value})
-    console.log(user)
+    const user = await mysql.findAccountid({ email });
+    console.log(user);
 
-    if(user) {
-        const {userid} = user;
-        res.send({result: userid})
+    if (user) {
+        res.send({ result: user.userId });
     } else {
-        res.send({result: "fail", text: "계정이 존재하지 않습니다."})
+        res.send({ result: 'fail', text: '계정이 존재하지 않습니다.' });
     }
 });
 
-
-// /api/user DELETE 파라미터를 전달 받아 조회한다.
 router.delete('/user', async (req, res) => {
     const { email, userid } = req.query;
-    console.log(req.query)
 
-    const result = await mysql.deleteUser(req.query)
-    console.log(result)
+    const result = await mysql.deleteUser(req.query);
+    console.log(result);
 
-    if(result) {
-        res.send({result: "success"})
+    if (result) {
+        res.send({ result: 'success' });
     } else {
-        res.send({result: "fail"})
+        res.send({ result: 'fail' });
     }
 });
 
-// /api/user DELETE 파라미터를 전달 받아 조회한다.
+// const array = [
+//     {
+//         no: 1,
+//         title: '에듀윌',
+//         subtitle: '🚨기간한정 특별 이벤트🚨 초시생 필수템, 만화입문서 무료배포!',
+//         tags: '#합격자수1위 #에듀윌 #공인중개사',
+//         url: 'EDUWILL.NET',
+//         text: '입문교재 선착순 무료신청☞ 합격자 수 1위 에듀윌 공인중개사',
+//         image: '/images/game-1.jpg',
+//         likecount: 1,
+//     },
+//     {
+//         no: 2,
+//         title: '코리아아이티',
+//         subtitle: '🚨기간한정 특별 이벤트🚨 프론트엔드 5개월차 수업!',
+//         tags: '#합격자수1위 #코리아아이티 #프론트엔드',
+//         url: 'KOREATIT.NET',
+//         text: '녹화 동영상 무료 제공!☞ 합격자 수 1위 에듀윌 공인중개사',
+//         image: '/images/game-2.jpg',
+//         likecount: 2,
+//     },
+// ];
+
 router.get('/home', async (req, res) => {
-    // console.log(req.query)
-    const array = await mysql.selectHome()
-    for(let item of array) {
-        const comment = await mysql.selectComment(item)
-        item['comment'] = comment
-    }
-    // const list = array.map(async item => {
-    //     const comment = await mysql.selectComment(item)
-    //     item['comment'] = comment
-    //     return item
-    // })
+    console.log(req.query);
 
-    console.log(array)
+    const array = await mysql.selectHome();
+    console.log(array);
 
-    res.send({result: array})
+    res.send({ result: array });
 });
 
 router.put('/home/like', async (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
 
-    await mysql.updateLike(req.body)
-    
-    const item = await mysql.findComment(req.body)
+    // 1. 첫번째 likecount를 업데이트 하는 코드
+    await mysql.updateLike(req.body);
+    // 2. 업데이트한 데이터를 셀렉트(가져오는) 코드
+    const item = await mysql.findHome(req.body);
 
-    // console.log(item)
-
-    res.send({result: item})
+    res.send({ result: item });
 });
 
-// /api/user DELETE 파라미터를 전달 받아 조회한다.
-router.get('/home/comment', async (req, res) => {
-    // console.log(req.query)
-    const array = await mysql.selectComment()
+// 댓글 목록 가져오기
+router.get("/home/comment", async (req, res) => {
+    console.log(req.query);
+
+    const array = await mysql.selectComment(req.query);
     res.send({result: array})
-});
+})
 
-router.post('/home/comment', async (req, res) => {
+// 댓글 추가하기
+router.post("/home/comment", async (req, res) => {
     console.log(req.body)
 
     await mysql.insertComment(req.body)
-    
-    const item = await mysql.selectComment(req.body)
+    res.send({result: "success"})
+    // const item = await mysql.selectComment(req.body)
+    // res.send({result: item})
+})
 
-    // console.log(item)
-
-    res.send({result: item})
-});
-
-router.delete('/home/comment', async (req, res) => {
-    console.log(req.query)
-
+// 댓글 삭제
+router.delete("/home/comment", async (req, res) => {
     await mysql.deleteComment(req.query)
+    res.send({result: "success"})
+})
 
-    const array = await mysql.selectComment(req.body)
-    console.log(array)
-
-    res.send({result: array})
-});
-
-router.put('/home/comment', async (req, res) => {
-    console.log(req.body)
-
+// 댓슬 편집
+router.put("/home/comment", async (req, res) => {
     await mysql.updateComment(req.body)
-    
-    const item = await mysql.selectComment(req.body)
-
-    // console.log(item)
-
-    res.send({result: item})
-});
-
-// 게시판 목록 조회
-router.get('/board', async (req, res) => {
-    console.log(req.query)
-
     res.send({result: "success"})
-});
-
-// 게시판 항목 조회
-router.get('/board/item', async (req, res) => {
-    console.log(req.query)
-
-    res.send({result: "success"})
-});
-
-// 게시판 항목 추가
-router.post('/board/item', async (req, res) => {
-    console.log(req.body)
-
-    res.send({result: "success"})
-});
-
-// 게시판 항목 편집
-router.put('/board/item', async (req, res) => {
-    console.log(req.body)
-
-    res.send({result: "success"})
-});
-
-// 게시판 항목 삭제
-router.delete('/home/detail', async (req, res) => {
-    console.log(req.query)
-
-    res.send({result: "success"})
-});
+})
 
 module.exports = router;
